@@ -1,0 +1,376 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 14.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     13723,        368]
+NotebookOptionsPosition[     12967,        349]
+NotebookOutlinePosition[     13387,        366]
+CellTagsIndexPosition[     13344,        363]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"SYSTEM", " ", "1"}], ":", " ", 
+    RowBox[{"1", "-", 
+     RowBox[{"Dimensional", " ", "Spring"}]}]}], "\[IndentingNewLine]", 
+   "*)"}], "\[IndentingNewLine]", 
+  RowBox[{"(*", "Constants", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"m", "=", "1"}], ";"}], "  ", 
+   RowBox[{"(*", "mass", "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"k", "=", "1"}], ";"}], "  ", 
+   RowBox[{"(*", 
+    RowBox[{"spring", " ", "constant"}], "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"x0", "=", "0"}], ";"}], " ", 
+   RowBox[{"(*", 
+    RowBox[{"equilibrium", " ", "position"}], "*)"}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{"Initial", " ", "conditions"}], "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"x", "=", "1"}], ";"}], "  ", 
+   RowBox[{"(*", 
+    RowBox[{"initial", " ", "position"}], "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"v", "=", "0"}], ";"}], "  ", 
+   RowBox[{"(*", 
+    RowBox[{"initial", " ", "velocity"}], "*)"}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{"Time", " ", "step"}], "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"dt", "=", "0.01"}], ";"}], "\n", "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{"Simulation", " ", "time"}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"tMax", "=", "100"}], ";"}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{"Force", " ", "function"}], "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"F", "[", "x_", "]"}], ":=", 
+    RowBox[{
+     RowBox[{"-", "k"}], " ", 
+     RowBox[{"(", 
+      RowBox[{"x", "-", "x0"}], ")"}]}]}], "\n", "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{"Energy", " ", "function"}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"En", "[", 
+     RowBox[{"x_", ",", "v_"}], "]"}], ":=", 
+    RowBox[{
+     RowBox[{"0.5", "*", "m", "*", 
+      RowBox[{"v", "^", "2"}]}], "+", 
+     RowBox[{"0.5", "*", "k", "*", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"x", "-", "x0"}], ")"}], "^", "2"}]}]}]}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Verlet", " ", 
+       RowBox[{"Algorithm", ":", "\[IndentingNewLine]", 
+        RowBox[{"Syntax", " ", "Notes", "\[IndentingNewLine]", "x_"}], ":", 
+        " ", 
+        RowBox[{
+        "underscore", " ", "denotes", " ", "this", " ", "is", " ", "a", " ", 
+         RowBox[{"Generic", "."}]}]}]}], "\[IndentingNewLine]", "    ", ":=", 
+      " ", 
+      RowBox[{"denotes", " ", "lazy", " ", "evaluation"}]}], ";", " ", 
+     RowBox[{"necessary", " ", "for", " ", "function", " ", "definitions"}]}],
+     "\[IndentingNewLine]", "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"velocityVerlet", "[", 
+     RowBox[{"x_", ",", "v_", ",", "dt_"}], "]"}], " ", ":=", " ", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"newX", ",", " ", "newV", ",", " ", "fOld", ",", " ", "fNew"}],
+        "}"}], ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"fOld", " ", "=", " ", 
+        RowBox[{"F", "[", "x", "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"newX", " ", "=", " ", 
+        RowBox[{"x", " ", "+", " ", 
+         RowBox[{"v", " ", "*", " ", "dt"}], " ", "+", " ", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"1", "/", "2"}], ")"}], " ", "*", " ", 
+          RowBox[{"f1", "/", "m"}], " ", "*", " ", 
+          RowBox[{"dt", "^", "2"}]}]}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"fNew", " ", "=", " ", 
+        RowBox[{"F", "[", "newX", "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"newV", " ", "=", " ", 
+        RowBox[{"v", "+", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"dt", "*", 
+            RowBox[{"(", 
+             RowBox[{"fOld", " ", "+", " ", "fNew"}], ")"}]}], ")"}], "/", 
+          RowBox[{"(", 
+           RowBox[{"2", "*", "m"}], ")"}]}]}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"{", 
+        RowBox[{"newX", ",", "newV"}], "}"}]}]}], "\[IndentingNewLine]", 
+     "]"}]}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{"Run", " ", "simulation"}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"data", "=", 
+     RowBox[{
+      RowBox[{"Reap", "[", "\[IndentingNewLine]", 
+       RowBox[{"Do", "[", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"x", ",", "v"}], "}"}], "=", 
+           RowBox[{"velocityVerlet", "[", 
+            RowBox[{"x", ",", "v", ",", "dt"}], "]"}]}], ";", 
+          "\[IndentingNewLine]", 
+          RowBox[{"Sow", "[", 
+           RowBox[{"{", 
+            RowBox[{"t", ",", "x", ",", "v", ",", 
+             RowBox[{"E", "[", 
+              RowBox[{"x", ",", "v"}], "]"}]}], "}"}], "]"}]}], ",", 
+         "\[IndentingNewLine]", 
+         RowBox[{"{", 
+          RowBox[{"t", ",", "0", ",", "tMax", ",", "dt"}], "}"}]}], 
+        "\[IndentingNewLine]", "]"}], "\[IndentingNewLine]", "]"}], "[", 
+      RowBox[{"[", 
+       RowBox[{"2", ",", "1"}], "]"}], "]"}]}], ";"}]}]}]], "Input",
+ CellChangeTimes->{{3.928593571875561*^9, 3.92859358885186*^9}, 
+   3.931872003934587*^9, {3.9318721884152803`*^9, 3.931872213308292*^9}, {
+   3.931872372212901*^9, 3.931872464350292*^9}, {3.9318725082916193`*^9, 
+   3.931872587961092*^9}, {3.93187264034111*^9, 3.931872677095742*^9}, {
+   3.931872725104238*^9, 3.931872766265376*^9}, {3.931872977005928*^9, 
+   3.931873014868843*^9}, {3.931873048767118*^9, 3.93187312915584*^9}, {
+   3.931873165873313*^9, 3.931873199059287*^9}, {3.9318732922443743`*^9, 
+   3.931873306934935*^9}, {3.931873363944566*^9, 3.931873369027433*^9}, 
+   3.931873543267601*^9, {3.931874469412218*^9, 3.9318744759964128`*^9}, {
+   3.931874686248583*^9, 3.931874708438656*^9}, 3.931874748731468*^9, {
+   3.931875059698394*^9, 3.931875103456657*^9}},
+ CellLabel->"In[34]:=",ExpressionUUID->"cf8196a5-fbe5-4a56-829e-32bf47c04712"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{"Plot", " ", "results"}], "*)"}], "\[IndentingNewLine]", 
+  RowBox[{"ListLinePlot", "[", 
+   RowBox[{
+    RowBox[{"{", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"Transpose", "[", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"data", "[", 
+          RowBox[{"[", 
+           RowBox[{"All", ",", "1"}], "]"}], "]"}], ",", 
+         RowBox[{"data", "[", 
+          RowBox[{"[", 
+           RowBox[{"All", ",", "2"}], "]"}], "]"}]}], "}"}], "]"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"Transpose", "[", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"data", "[", 
+          RowBox[{"[", 
+           RowBox[{"All", ",", "1"}], "]"}], "]"}], ",", 
+         RowBox[{"data", "[", 
+          RowBox[{"[", 
+           RowBox[{"All", ",", "3"}], "]"}], "]"}]}], "}"}], "]"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"Transpose", "[", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"data", "[", 
+          RowBox[{"[", 
+           RowBox[{"All", ",", "1"}], "]"}], "]"}], ",", 
+         RowBox[{"data", "[", 
+          RowBox[{"[", 
+           RowBox[{"All", ",", "4"}], "]"}], "]"}]}], "}"}], 
+       "\[IndentingNewLine]", "]"}]}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"PlotLegends", "->", 
+     RowBox[{"{", 
+      RowBox[{
+      "\"\<Position\>\"", ",", "\"\<Velocity\>\"", ",", 
+       "\"\<Total Energy\>\""}], "}"}]}], ",", "\[IndentingNewLine]", 
+    RowBox[{"PlotLabel", "->", "\"\<1D Spring Simulation\>\""}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"AxesLabel", "->", 
+     RowBox[{"{", 
+      RowBox[{"\"\<Time\>\"", ",", "\"\<Value\>\""}], "}"}]}]}], 
+   "]"}]}]], "Input",
+ CellChangeTimes->{{3.931875228568145*^9, 
+  3.931875272168264*^9}},ExpressionUUID->"5796bdd3-8dce-41b4-935f-\
+952f4d46e159"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{"Check", " ", "energy", " ", "conservation"}], "*)"}], 
+  RowBox[{
+   RowBox[{
+    RowBox[{"energies", "=", 
+     RowBox[{"data", "[", 
+      RowBox[{"[", 
+       RowBox[{"All", ",", "4"}], "]"}], "]"}]}], ";"}], "\n", 
+   RowBox[{"Print", "[", 
+    RowBox[{"\"\<Standard deviation of energy: \>\"", ",", 
+     RowBox[{"StandardDeviation", "[", "energies", "]"}]}], "]"}], "\n", 
+   RowBox[{"Print", "[", 
+    RowBox[{"\"\<Mean energy: \>\"", ",", 
+     RowBox[{"Mean", "[", "energies", "]"}]}], "]"}], "\n", 
+   RowBox[{"Print", "[", 
+    RowBox[{"\"\<Relative energy fluctuation: \>\"", ",", 
+     RowBox[{
+      RowBox[{"StandardDeviation", "[", "energies", "]"}], "/", 
+      RowBox[{"Mean", "[", "energies", "]"}]}]}], "]"}], "\n"}]}]], "Input",
+ CellChangeTimes->{{3.931875290433385*^9, 
+  3.93187529043569*^9}},ExpressionUUID->"edc7463a-0877-4c9c-b34e-\
+d54fc33a789c"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"Check", " ", "if", " ", "std", 
+     RowBox[{"(", "E", ")"}]}], "\[Proportional]", 
+    RowBox[{"dt", "^", "2"}]}], "*)"}], 
+  RowBox[{
+   RowBox[{
+    RowBox[{"dtValues", "=", 
+     RowBox[{"{", 
+      RowBox[{"0.001", ",", "0.005", ",", "0.01", ",", "0.05", ",", "0.1"}], 
+      "}"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"stdEnergies", "=", 
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"x", ",", "v"}], "}"}], "=", 
+         RowBox[{"{", 
+          RowBox[{"1", ",", "0"}], "}"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"energies", "=", 
+         RowBox[{"Table", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"x", ",", "v"}], "}"}], "=", 
+             RowBox[{"velocityVerlet", "[", 
+              RowBox[{"x", ",", "v", ",", "dt"}], "]"}]}], ";", 
+            "\[IndentingNewLine]", 
+            RowBox[{"E", "[", 
+             RowBox[{"x", ",", "v"}], "]"}]}], ",", 
+           RowBox[{"{", 
+            RowBox[{"t", ",", "0", ",", "tMax", ",", "dt"}], "}"}]}], "]"}]}],
+         ";", "\[IndentingNewLine]", 
+        RowBox[{"{", 
+         RowBox[{"dt", ",", 
+          RowBox[{"StandardDeviation", "[", "energies", "]"}]}], "}"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"dt", ",", "dtValues"}], "}"}]}], "]"}]}], ";"}], "\n", 
+   "\[IndentingNewLine]", 
+   RowBox[{"ListLogLogPlot", "[", 
+    RowBox[{"stdEnergies", ",", "\[IndentingNewLine]", 
+     RowBox[{
+     "PlotLabel", "->", "\"\<Energy Standard Deviation vs Time Step\>\""}], 
+     ",", "\[IndentingNewLine]", 
+     RowBox[{"AxesLabel", "->", 
+      RowBox[{"{", 
+       RowBox[{"\"\<dt\>\"", ",", "\"\<std(E)\>\""}], "}"}]}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Epilog", "->", 
+      RowBox[{"{", 
+       RowBox[{"Red", ",", 
+        RowBox[{"Line", "[", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"10", "^", 
+              RowBox[{"-", "3"}]}], ",", 
+             RowBox[{"10", "^", 
+              RowBox[{"-", "6"}]}]}], "}"}], ",", "\[IndentingNewLine]", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"10", "^", 
+              RowBox[{"-", "1"}]}], ",", 
+             RowBox[{"10", "^", 
+              RowBox[{"-", "2"}]}]}], "}"}]}], "}"}], "]"}]}], "}"}]}]}], 
+    "\[IndentingNewLine]", "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.931874791729254*^9, 3.931874793705934*^9}, 
+   3.931874831146497*^9, {3.931874900620634*^9, 3.931874901870141*^9}, {
+   3.93187532405052*^9, 
+   3.93187535461992*^9}},ExpressionUUID->"608c0cbd-a638-4d4f-8b28-\
+99bf4bc390ec"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{
+    "Fit", " ", "a", " ", "power", " ", "law", " ", "to", " ", "check", " ", 
+     "if", " ", "std", 
+     RowBox[{"(", "E", ")"}]}], "\[Proportional]", 
+    RowBox[{"dt", "^", "2"}]}], "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"fit", "=", 
+    RowBox[{"FindFit", "[", 
+     RowBox[{"stdEnergies", ",", 
+      RowBox[{"a", "*", 
+       RowBox[{"dt", "^", "b"}]}], ",", 
+      RowBox[{"{", 
+       RowBox[{"a", ",", "b"}], "}"}], ",", "dt"}], "]"}]}], "\n", 
+   RowBox[{"Print", "[", 
+    RowBox[{"\"\<Fitted power law: std(E) \[Proportional] dt^\>\"", ",", 
+     RowBox[{"b", "/.", " ", "fit"}]}], "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.9318753741486893`*^9, 
+  3.93187537808858*^9}},ExpressionUUID->"9078334e-c060-4d71-8800-\
+8b4fa99148be"]
+},
+WindowSize->{Full, Full},
+WindowMargins->{{4, Automatic}, {Automatic, 4}},
+CellContext->Notebook,
+FrontEndVersion->"14.0 for Mac OS X ARM (64-bit) (December 12, 2023)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"b4320bbb-11c6-47ae-b4d1-6a12e099410c"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 6058, 147, 976, "Input",ExpressionUUID->"cf8196a5-fbe5-4a56-829e-32bf47c04712"],
+Cell[6619, 169, 1830, 51, 199, "Input",ExpressionUUID->"5796bdd3-8dce-41b4-935f-952f4d46e159"],
+Cell[8452, 222, 927, 23, 115, "Input",ExpressionUUID->"edc7463a-0877-4c9c-b34e-d54fc33a789c"],
+Cell[9382, 247, 2755, 76, 262, "Input",ExpressionUUID->"608c0cbd-a638-4d4f-8b28-99bf4bc390ec"],
+Cell[12140, 325, 823, 22, 73, "Input",ExpressionUUID->"9078334e-c060-4d71-8800-8b4fa99148be"]
+}
+]
+*)
+

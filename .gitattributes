@@ -1,1 +1,2 @@
 *.mlx linguist-language=MATLAB
+Mol_Dyn_Onboarding3.nb filter=lfs diff=lfs merge=lfs -text
